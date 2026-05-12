@@ -3,314 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Legal Case Analyzer — AI-Powered</title>
+  <title>LegalAI — AI-Powered Legal Tools</title>
   <style>
     :root {
-      --navy:       #1e3a5f;
-      --navy-dark:  #152b47;
-      --gold:       #c9a227;
-      --gold-light: #f0d878;
-      --bg:         #f4f1eb;
-      --surface:    #ffffff;
-      --border:     #ddd8cc;
-      --text:       #1a1a2e;
-      --muted:      #6b7280;
-      --red:        #dc2626;
-      --red-bg:     #fef2f2;
-      --amber:      #d97706;
-      --amber-bg:   #fffbeb;
-      --green:      #16a34a;
-      --green-bg:   #f0fdf4;
-      --radius:     10px;
-      --shadow:     0 2px 12px rgba(0,0,0,.08);
+      --navy:      #1e3a5f; --navy-d: #152b47; --navy-l: #2a5080;
+      --gold:      #c9a227; --gold-l: #f0d878;
+      --bg:        #f4f1eb; --surface: #fff; --border: #ddd8cc;
+      --text:      #1a1a2e; --muted:   #6b7280;
+      --red:       #dc2626; --red-bg:  #fef2f2;
+      --amber:     #d97706; --amber-bg:#fffbeb;
+      --green:     #16a34a; --green-bg:#f0fdf4;
+      --blue:      #2563eb; --blue-bg: #eff6ff;
+      --radius: 10px; --shadow: 0 2px 14px rgba(0,0,0,.08);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+    body { font-family: Georgia, 'Times New Roman', serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header { background: var(--navy); color: #fff; padding: 0 2rem; display: flex; align-items: center; gap: 1rem; height: 60px; border-bottom: 3px solid var(--gold); }
+    .logo  { font-size: 1.4rem; font-weight: bold; letter-spacing: .02em; }
+    .logo span { color: var(--gold); }
+    .tagline { font-family: Arial, sans-serif; font-size: .72rem; color: #a0b4cc; margin-left: auto; text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ── Tab nav ─────────────────────────────────────────────── */
+    .tab-nav { background: var(--navy-d); display: flex; padding: 0 1.5rem; gap: 2px; }
+    .tab-btn {
+      font-family: Arial, sans-serif; font-size: .8rem; font-weight: 600;
+      letter-spacing: .05em; text-transform: uppercase; color: #8aa3be;
+      padding: .75rem 1.2rem; border: none; background: none; cursor: pointer;
+      border-bottom: 3px solid transparent; transition: color .15s, border-color .15s;
     }
-    /* ── Header ──────────────────────────────────────────── */
-    header {
-      background: var(--navy);
-      color: #fff;
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      height: 64px;
-      border-bottom: 3px solid var(--gold);
+    .tab-btn:hover { color: #c9dce9; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--gold); }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    main { max-width: 960px; margin: 2rem auto; padding: 0 1.25rem; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── Card ────────────────────────────────────────────────── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.6rem 1.9rem; margin-bottom: 1.4rem; }
+    .card-title { font-family: Arial, sans-serif; font-size: .85rem; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 1.1rem; padding-bottom: .55rem; border-bottom: 2px solid var(--gold); }
+
+    /* ── Form elements ───────────────────────────────────────── */
+    label { display: block; font-family: Arial, sans-serif; font-size: .75rem; font-weight: 700; color: var(--navy); margin-bottom: .35rem; text-transform: uppercase; letter-spacing: .06em; }
+    input[type=text], input[type=date], select, textarea {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 6px;
+      padding: .6rem .85rem; font-size: .9rem; font-family: Georgia, serif;
+      color: var(--text); background: #faf9f6; transition: border-color .15s; margin-bottom: 1rem;
     }
-    header .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: .02em; }
-    header .logo span { color: var(--gold); }
-    header .tagline {
-      font-family: 'Arial', sans-serif;
-      font-size: .78rem;
-      color: #a0b4cc;
-      margin-left: auto;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-    /* ── Layout ──────────────────────────────────────────── */
-    main { max-width: 900px; margin: 2.5rem auto; padding: 0 1.25rem; }
-    /* ── Card ────────────────────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.75rem 2rem;
-      margin-bottom: 1.5rem;
-    }
-    .card-title {
-      font-size: 1rem;
-      font-weight: bold;
-      color: var(--navy);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-bottom: 1.25rem;
-      padding-bottom: .6rem;
-      border-bottom: 2px solid var(--gold);
-      font-family: 'Arial', sans-serif;
-    }
-    /* ── Form ────────────────────────────────────────────── */
-    label {
-      display: block;
-      font-family: 'Arial', sans-serif;
-      font-size: .82rem;
-      font-weight: 600;
-      color: var(--navy);
-      margin-bottom: .4rem;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-    input[type=text], textarea {
-      width: 100%;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      padding: .65rem .9rem;
-      font-size: .95rem;
-      font-family: 'Georgia', serif;
-      color: var(--text);
-      background: #faf9f6;
-      transition: border-color .15s;
-      margin-bottom: 1.1rem;
-    }
-    input[type=text]:focus, textarea:focus {
-      outline: none;
-      border-color: var(--navy);
-      background: #fff;
-    }
-    textarea { height: 260px; resize: vertical; line-height: 1.6; }
-    .file-row {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      margin-bottom: 1.1rem;
-    }
-    .file-btn {
-      font-family: 'Arial', sans-serif;
-      font-size: .8rem;
-      padding: .45rem .9rem;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      background: #faf9f6;
-      cursor: pointer;
-      color: var(--navy);
-      font-weight: 600;
-      letter-spacing: .04em;
-      transition: background .15s;
-    }
-    .file-btn:hover { background: #ece9e1; }
-    .file-name { font-family: 'Arial', sans-serif; font-size: .82rem; color: var(--muted); }
-    #file-input { display: none; }
-    .btn-analyze {
-      width: 100%;
-      padding: .85rem;
-      background: var(--navy);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: 'Arial', sans-serif;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background .2s, transform .1s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .6rem;
-    }
-    .btn-analyze:hover:not(:disabled) { background: var(--navy-dark); }
-    .btn-analyze:active:not(:disabled) { transform: scale(.99); }
-    .btn-analyze:disabled { opacity: .6; cursor: not-allowed; }
-    /* ── Spinner ─────────────────────────────────────────── */
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2.5px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--navy); background: #fff; }
+    textarea { resize: vertical; line-height: 1.6; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font-family: Arial, sans-serif; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border: none; border-radius: 7px; cursor: pointer; transition: background .18s, transform .1s; }
+    .btn:active:not(:disabled) { transform: scale(.99); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-primary { background: var(--navy); color: #fff; padding: .8rem 1.5rem; font-size: .88rem; }
+    .btn-primary:hover:not(:disabled) { background: var(--navy-d); }
+    .btn-full { width: 100%; }
+    .btn-sm { padding: .45rem .9rem; font-size: .75rem; }
+    .btn-outline { background: none; border: 1.5px solid var(--navy); color: var(--navy); padding: .45rem .9rem; font-size: .75rem; }
+    .btn-outline:hover { background: var(--navy); color: #fff; }
+    .btn-ghost { background: none; border: 1.5px solid var(--border); color: var(--muted); padding: .45rem .9rem; font-size: .75rem; }
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* ── File row ────────────────────────────────────────────── */
+    .file-row { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .file-name { font-family: Arial, sans-serif; font-size: .8rem; color: var(--muted); }
+    input[type=file] { display: none; }
+
+    /* ── Spinner ─────────────────────────────────────────────── */
+    .spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    /* ── Error banner ────────────────────────────────────── */
-    .error-banner {
-      background: var(--red-bg);
-      border: 1px solid #fca5a5;
-      border-radius: 8px;
-      padding: .9rem 1.1rem;
-      color: var(--red);
-      font-family: 'Arial', sans-serif;
-      font-size: .88rem;
-      margin-bottom: 1.25rem;
-      display: none;
-    }
-    /* ── Risk score banner ───────────────────────────────── */
-    .risk-banner {
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      font-family: 'Arial', sans-serif;
-    }
-    .risk-score-circle {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-    .risk-score-circle .num  { font-size: 1.8rem; line-height: 1; }
-    .risk-score-circle .denom { font-size: .7rem; opacity: .75; }
+
+    /* ── Error / info banners ────────────────────────────────── */
+    .banner { border-radius: 7px; padding: .8rem 1rem; font-family: Arial, sans-serif; font-size: .85rem; margin-bottom: 1.1rem; display: none; }
+    .banner.error { background: var(--red-bg); border: 1px solid #fca5a5; color: var(--red); }
+    .banner.info  { background: var(--blue-bg); border: 1px solid #93c5fd; color: var(--blue); }
+
+    /* ── Risk banner ─────────────────────────────────────────── */
+    .risk-banner { border-radius: 9px; padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 1.4rem; margin-bottom: 1.4rem; font-family: Arial, sans-serif; }
+    .risk-circle { width: 68px; height: 68px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; flex-shrink: 0; }
+    .risk-circle .num  { font-size: 1.7rem; line-height: 1; }
+    .risk-circle .den  { font-size: .65rem; opacity: .75; }
     .risk-info { flex: 1; }
-    .risk-label { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
-    .risk-bar-wrap { background: rgba(0,0,0,.1); border-radius: 999px; height: 8px; }
-    .risk-bar      { height: 8px; border-radius: 999px; transition: width .6s ease; }
-    .risk-meta     { font-size: .78rem; margin-top: .4rem; opacity: .8; }
-    /* ── Overview grid ───────────────────────────────────── */
-    .overview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: .9rem;
-      margin-bottom: 1.25rem;
-    }
-    .ov-item { background: #faf9f6; border-radius: 8px; padding: .7rem .9rem; border: 1px solid var(--border); }
-    .ov-label { font-family: 'Arial', sans-serif; font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .25rem; }
-    .ov-value { font-size: .9rem; font-weight: bold; color: var(--navy); }
-    /* ── Summary ─────────────────────────────────────────── */
-    .summary-text { font-size: .97rem; line-height: 1.75; color: var(--text); margin-bottom: .5rem; }
-    .parties-list { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
-    .party-chip {
-      background: #eef2f9;
-      border: 1px solid #c3cfe2;
-      color: var(--navy);
-      border-radius: 999px;
-      padding: .25rem .75rem;
-      font-family: 'Arial', sans-serif;
-      font-size: .78rem;
-      font-weight: 600;
-    }
-    /* ── Clause cards ────────────────────────────────────── */
-    .clause-list { display: flex; flex-direction: column; gap: .85rem; }
-    .clause-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.1rem;
-      border-left: 4px solid;
-    }
-    .clause-card.HIGH   { border-left-color: var(--red);   background: #fffafa; }
-    .clause-card.MEDIUM { border-left-color: var(--amber); background: #fffdf5; }
-    .clause-card.LOW    { border-left-color: var(--green); background: #f8fffe; }
-    .clause-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
-    .clause-type { font-family: 'Arial', sans-serif; font-size: .82rem; font-weight: 700; color: var(--navy); }
-    .sig-badge {
-      font-family: 'Arial', sans-serif;
-      font-size: .68rem;
-      font-weight: 800;
-      padding: .2rem .55rem;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .sig-badge.HIGH   { background: var(--red-bg);   color: var(--red);   border: 1px solid #fca5a5; }
-    .sig-badge.MEDIUM { background: var(--amber-bg); color: var(--amber); border: 1px solid #fcd34d; }
-    .sig-badge.LOW    { background: var(--green-bg); color: var(--green); border: 1px solid #86efac; }
-    .clause-section { font-family: 'Arial', sans-serif; font-size: .72rem; color: var(--muted); margin-left: auto; }
-    .clause-text {
-      font-size: .84rem;
-      color: #444;
-      font-style: italic;
-      margin-bottom: .5rem;
-      line-height: 1.55;
-      border-left: 2px solid #ddd;
-      padding-left: .65rem;
-    }
-    .clause-explanation { font-family: 'Arial', sans-serif; font-size: .84rem; color: var(--text); line-height: 1.5; }
-    /* ── Risk cards ──────────────────────────────────────── */
-    .risk-list { display: flex; flex-direction: column; gap: .85rem; }
-    .risk-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.1rem;
-      border-left: 4px solid;
-    }
-    .risk-card.HIGH   { border-left-color: var(--red);   background: #fffafa; }
-    .risk-card.MEDIUM { border-left-color: var(--amber); background: #fffdf5; }
-    .risk-card.LOW    { border-left-color: var(--green); background: #f8fffe; }
-    .risk-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .45rem; }
-    .risk-id { font-family: 'Arial', sans-serif; font-size: .72rem; color: var(--muted); font-weight: 600; }
-    .risk-title { font-family: 'Arial', sans-serif; font-size: .88rem; font-weight: 700; color: var(--navy); }
-    .risk-category { font-family: 'Arial', sans-serif; font-size: .72rem; color: var(--muted); margin-left: auto; }
-    .risk-desc { font-family: 'Arial', sans-serif; font-size: .84rem; line-height: 1.5; color: var(--text); margin-bottom: .5rem; }
-    .risk-affected { font-family: 'Arial', sans-serif; font-size: .78rem; color: var(--muted); margin-bottom: .35rem; }
-    .risk-action {
-      font-family: 'Arial', sans-serif;
-      font-size: .82rem;
-      background: #f0f4ff;
-      border: 1px solid #c7d7f9;
-      border-radius: 6px;
-      padding: .45rem .7rem;
-      color: var(--navy);
-      line-height: 1.45;
-    }
-    .risk-action::before { content: '→ '; font-weight: 700; }
-    /* ── Lists ───────────────────────────────────────────── */
-    .point-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
-    .point-list li {
-      font-family: 'Arial', sans-serif;
-      font-size: .88rem;
-      line-height: 1.55;
-      padding-left: 1.4rem;
-      position: relative;
-      color: var(--text);
-    }
-    .point-list li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: var(--gold);
-      font-size: .9rem;
-    }
-    .action-list li::before { content: '✔'; color: var(--green); }
-    /* ── Meta footer ─────────────────────────────────────── */
-    .meta-footer {
-      font-family: 'Arial', sans-serif;
-      font-size: .75rem;
-      color: var(--muted);
-      text-align: center;
-      margin-top: .5rem;
-    }
-    /* ── Responsive ──────────────────────────────────────── */
-    @media (max-width: 600px) {
+    .risk-label { font-size: 1.2rem; font-weight: 800; margin-bottom: .25rem; }
+    .risk-bar-bg { background: rgba(0,0,0,.12); border-radius: 999px; height: 7px; }
+    .risk-bar    { height: 7px; border-radius: 999px; transition: width .65s ease; }
+    .risk-meta   { font-size: .75rem; margin-top: .35rem; opacity: .8; }
+
+    /* ── Overview grid ───────────────────────────────────────── */
+    .ov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: .8rem; margin-bottom: 1.1rem; }
+    .ov-item { background: #faf9f6; border-radius: 7px; padding: .65rem .85rem; border: 1px solid var(--border); }
+    .ov-label { font-family: Arial, sans-serif; font-size: .67rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .2rem; }
+    .ov-val   { font-size: .88rem; font-weight: bold; color: var(--navy); }
+
+    /* ── Badges ──────────────────────────────────────────────── */
+    .badge { display: inline-block; font-family: Arial, sans-serif; font-size: .65rem; font-weight: 800; padding: .18rem .5rem; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em; }
+    .badge.HIGH   { background: var(--red-bg);   color: var(--red);   border: 1px solid #fca5a5; }
+    .badge.MEDIUM { background: var(--amber-bg); color: var(--amber); border: 1px solid #fcd34d; }
+    .badge.LOW    { background: var(--green-bg); color: var(--green); border: 1px solid #86efac; }
+    .badge.ADDED  { background: var(--green-bg); color: var(--green); border: 1px solid #86efac; }
+    .badge.REMOVED{ background: var(--red-bg);   color: var(--red);   border: 1px solid #fca5a5; }
+    .badge.MODIFIED{ background: var(--amber-bg);color: var(--amber); border: 1px solid #fcd34d; }
+    .badge.blue   { background: var(--blue-bg);  color: var(--blue);  border: 1px solid #93c5fd; }
+
+    /* ── Clause / risk / date / negotiation cards ────────────── */
+    .item-list { display: flex; flex-direction: column; gap: .8rem; }
+    .item-card { border: 1px solid var(--border); border-radius: 8px; padding: .95rem 1.1rem; border-left: 4px solid; }
+    .item-card.HIGH,.item-card.INCREASED { border-left-color: var(--red);   background: #fffafa; }
+    .item-card.MEDIUM                    { border-left-color: var(--amber); background: #fffdf5; }
+    .item-card.LOW,.item-card.DECREASED  { border-left-color: var(--green); background: #f8fffe; }
+    .item-card.ADDED                     { border-left-color: var(--green); background: #f5fff8; }
+    .item-card.REMOVED                   { border-left-color: var(--red);   background: #fffafa; }
+    .item-card.MODIFIED                  { border-left-color: var(--amber); background: #fffdf5; }
+    .item-card.neutral                   { border-left-color: var(--blue);  background: var(--blue-bg); }
+    .item-header { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; margin-bottom: .45rem; }
+    .item-type   { font-family: Arial, sans-serif; font-size: .8rem; font-weight: 700; color: var(--navy); }
+    .item-section{ font-family: Arial, sans-serif; font-size: .7rem; color: var(--muted); margin-left: auto; }
+    .item-quote  { font-size: .82rem; color: #555; font-style: italic; margin-bottom: .45rem; line-height: 1.55; border-left: 2px solid #ccc; padding-left: .6rem; }
+    .item-body   { font-family: Arial, sans-serif; font-size: .83rem; color: var(--text); line-height: 1.5; }
+    .item-action { font-family: Arial, sans-serif; font-size: .8rem; background: #f0f4ff; border: 1px solid #c7d7f9; border-radius: 6px; padding: .4rem .65rem; color: var(--navy); margin-top: .4rem; line-height: 1.4; }
+    .item-action::before { content: '→ '; font-weight: 700; }
+
+    /* ── Bullet lists ────────────────────────────────────────── */
+    .blist { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .blist li { font-family: Arial, sans-serif; font-size: .87rem; line-height: 1.55; padding-left: 1.3rem; position: relative; }
+    .blist li::before { content: '▸'; position: absolute; left: 0; color: var(--gold); }
+    .blist.check li::before { content: '✔'; color: var(--green); }
+    .blist.warn  li::before { content: '⚠'; color: var(--amber); }
+
+    /* ── Export bar ──────────────────────────────────────────── */
+    .export-bar { display: flex; gap: .6rem; align-items: center; margin-bottom: 1.2rem; }
+    .export-bar span { font-family: Arial, sans-serif; font-size: .78rem; color: var(--muted); }
+
+    /* ── Case search results ─────────────────────────────────── */
+    .case-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.15rem; margin-bottom: .8rem; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .case-name { font-size: .97rem; font-weight: bold; color: var(--navy); margin-bottom: .3rem; }
+    .case-meta { font-family: Arial, sans-serif; font-size: .76rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .5rem; }
+    .case-meta span { background: #f0f0ea; border-radius: 4px; padding: .15rem .45rem; }
+    .case-snippet { font-size: .84rem; color: #444; line-height: 1.55; margin-bottom: .6rem; }
+    .search-count { font-family: Arial, sans-serif; font-size: .82rem; color: var(--muted); margin-bottom: 1rem; }
+
+    /* ── Compare layout ──────────────────────────────────────── */
+    .compare-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .change-label { font-family: Arial, sans-serif; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: .6rem; display: flex; align-items: center; gap: .4rem; }
+
+    /* ── Q&A chat ────────────────────────────────────────────── */
+    .chat-log { display: flex; flex-direction: column; gap: .9rem; margin-bottom: 1.1rem; max-height: 420px; overflow-y: auto; }
+    .chat-q, .chat-a { font-family: Arial, sans-serif; font-size: .87rem; line-height: 1.55; border-radius: 8px; padding: .7rem .9rem; }
+    .chat-q { background: var(--navy); color: #fff; align-self: flex-end; max-width: 85%; }
+    .chat-a { background: #f4f1eb; border: 1px solid var(--border); color: var(--text); max-width: 90%; }
+    .chat-a .cite { font-size: .75rem; color: var(--muted); margin-top: .3rem; font-style: italic; }
+
+    /* ── Misc ────────────────────────────────────────────────── */
+    .section-hdr { font-family: Arial, sans-serif; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--navy); margin-bottom: .7rem; }
+    .meta-footer { font-family: Arial, sans-serif; font-size: .72rem; color: var(--muted); text-align: center; margin: .5rem 0 1.5rem; }
+    .parties-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+    .party-chip  { background: #eef2f9; border: 1px solid #c3cfe2; color: var(--navy); border-radius: 999px; padding: .22rem .7rem; font-family: Arial, sans-serif; font-size: .76rem; font-weight: 600; }
+    .reset-btn   { display: block; margin: 0 auto 2.5rem; }
+    hr.divider   { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--muted); font-family: Arial, sans-serif; font-size: .9rem; }
+
+    @media(max-width:640px){
+      .row2,.row3,.compare-cols { grid-template-columns: 1fr; }
       header .tagline { display: none; }
-      .card { padding: 1.25rem 1rem; }
-      .overview-grid { grid-template-columns: 1fr 1fr; }
+      .tab-btn { padding: .65rem .75rem; font-size: .72rem; }
+      .card { padding: 1.1rem .95rem; }
+    }
+
+    @media print {
+      header, .tab-nav, #input-card, .export-bar, .reset-btn, .btn { display: none !important; }
+      .tab-pane { display: block !important; }
+      .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
     }
   </style>
 </head>
@@ -318,274 +186,694 @@
 
 <header>
   <div class="logo">⚖ Legal<span>AI</span></div>
-  <div class="tagline">Powered by Claude · AI Legal Analysis</div>
+  <div class="tagline">Powered by Claude · AI Legal Tools</div>
 </header>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="analyze">📄 Analyze</button>
+  <button class="tab-btn" data-tab="search">🔍 Case Search</button>
+  <button class="tab-btn" data-tab="compare">📊 Compare</button>
+  <button class="tab-btn" data-tab="ask">💬 Ask AI</button>
+</nav>
 
 <main>
 
-  <!-- Input card -->
+<!-- ══════════════════ TAB: ANALYZE ══════════════════ -->
+<div id="tab-analyze" class="tab-pane active">
+
   <div class="card" id="input-card">
     <div class="card-title">Analyze a Legal Document</div>
-
-    <div id="error-banner" class="error-banner"></div>
+    <div id="a-error" class="banner error"></div>
 
     <label for="case-name">Case / Document Name</label>
     <input type="text" id="case-name" placeholder="e.g. Vendor Agreement — Acme Corp" maxlength="120">
 
     <label for="doc-text">Paste Document Text</label>
-    <textarea id="doc-text" placeholder="Paste the full text of the legal document here — contracts, agreements, court filings, regulatory notices, NDAs, and more."></textarea>
+    <textarea id="doc-text" rows="10" placeholder="Paste the full text of the legal document here — contracts, court filings, NDAs, regulatory notices, and more."></textarea>
 
     <div class="file-row">
-      <button class="file-btn" onclick="document.getElementById('file-input').click()">📂 Load from file</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('file-input').click()">📂 Load from file</button>
       <span class="file-name" id="file-name">No file chosen (.txt or .md)</span>
       <input type="file" id="file-input" accept=".txt,.md,.text">
     </div>
 
-    <button class="btn-analyze" id="analyze-btn" onclick="analyzeDocument()">
-      <span id="btn-text">Analyze Document</span>
+    <button class="btn btn-primary btn-full" id="analyze-btn" onclick="runAnalysis()">
+      <span id="a-btn-txt">Analyze Document</span>
     </button>
   </div>
 
-  <!-- Results (hidden until analysis completes) -->
+  <!-- Results -->
   <div id="results" style="display:none">
 
-    <!-- Risk banner -->
     <div class="risk-banner" id="risk-banner">
-      <div class="risk-score-circle" id="risk-circle">
+      <div class="risk-circle" id="risk-circle">
         <span class="num" id="risk-num">—</span>
-        <span class="denom">/10</span>
+        <span class="den">/10</span>
       </div>
       <div class="risk-info">
         <div class="risk-label" id="risk-label">—</div>
-        <div class="risk-bar-wrap">
-          <div class="risk-bar" id="risk-bar" style="width:0%"></div>
-        </div>
+        <div class="risk-bar-bg"><div class="risk-bar" id="risk-bar" style="width:0"></div></div>
         <div class="risk-meta" id="risk-meta"></div>
       </div>
     </div>
 
-    <!-- Overview -->
+    <div class="export-bar">
+      <span>Export:</span>
+      <button class="btn btn-outline btn-sm" onclick="exportTxt()">⬇ Text</button>
+      <button class="btn btn-outline btn-sm" onclick="exportJson()">⬇ JSON</button>
+      <button class="btn btn-ghost btn-sm" onclick="window.print()">🖨 Print</button>
+      <button class="btn btn-ghost btn-sm" onclick="useInAsk()" id="use-in-ask-btn">💬 Ask questions →</button>
+    </div>
+
     <div class="card">
       <div class="card-title">Case Overview</div>
-      <div class="overview-grid" id="overview-grid"></div>
-      <p class="summary-text" id="summary-text"></p>
-      <div class="parties-list" id="parties-list"></div>
+      <div class="ov-grid" id="ov-grid"></div>
+      <p style="font-size:.95rem;line-height:1.75" id="summary-txt"></p>
+      <div class="parties-row" id="parties-row"></div>
     </div>
 
-    <!-- Key Points -->
-    <div class="card" id="key-points-card">
+    <div class="card" id="dates-card">
+      <div class="card-title">Key Dates &amp; Deadlines</div>
+      <div class="item-list" id="dates-list"></div>
+    </div>
+
+    <div class="card">
       <div class="card-title">Key Points</div>
-      <ul class="point-list" id="key-points-list"></ul>
+      <ul class="blist" id="kp-list"></ul>
     </div>
 
-    <!-- Key Clauses -->
-    <div class="card" id="clauses-card">
+    <div class="card">
       <div class="card-title">Key Clauses</div>
-      <div class="clause-list" id="clause-list"></div>
+      <div class="item-list" id="clause-list"></div>
     </div>
 
-    <!-- Risks -->
-    <div class="card" id="risks-card">
+    <div class="card">
       <div class="card-title">Identified Risks</div>
-      <div class="risk-list" id="risk-list"></div>
+      <div class="item-list" id="risk-list"></div>
     </div>
 
-    <!-- Recommended Actions -->
-    <div class="card" id="actions-card">
+    <div class="card" id="neg-card">
+      <div class="card-title">Negotiation Points</div>
+      <div class="item-list" id="neg-list"></div>
+    </div>
+
+    <div class="card">
       <div class="card-title">Recommended Actions</div>
-      <ul class="point-list action-list" id="actions-list"></ul>
+      <ul class="blist check" id="actions-list"></ul>
     </div>
 
-    <p class="meta-footer" id="meta-footer"></p>
+    <p class="meta-footer" id="a-meta"></p>
+    <button class="btn btn-primary btn-sm reset-btn" onclick="resetAnalyze()">Analyze Another Document</button>
+  </div>
 
-    <!-- Analyze another -->
-    <div style="text-align:center;margin-bottom:2.5rem">
-      <button class="btn-analyze" style="width:auto;padding:.7rem 2rem;font-size:.85rem"
-              onclick="resetForm()">Analyze Another Document</button>
+</div><!-- /tab-analyze -->
+
+<!-- ══════════════════ TAB: CASE SEARCH ══════════════════ -->
+<div id="tab-search" class="tab-pane">
+  <div class="card">
+    <div class="card-title">Search Public Court Opinions</div>
+    <p style="font-family:Arial,sans-serif;font-size:.83rem;color:var(--muted);margin-bottom:1rem">
+      Search millions of federal and state court opinions via <strong>CourtListener</strong> (free public database).
+    </p>
+    <div id="s-error" class="banner error"></div>
+
+    <label for="s-query">Search Query</label>
+    <input type="text" id="s-query" placeholder="e.g. wrongful termination at-will employment breach contract…" onkeydown="if(event.key==='Enter')searchCases()">
+
+    <div class="row3">
+      <div>
+        <label for="s-court">Jurisdiction</label>
+        <select id="s-court">
+          <option value="all">All Courts</option>
+          <optgroup label="Federal — Supreme & Circuit">
+            <option value="scotus">Supreme Court (SCOTUS)</option>
+            <option value="ca1">1st Circuit</option>
+            <option value="ca2">2nd Circuit</option>
+            <option value="ca3">3rd Circuit</option>
+            <option value="ca4">4th Circuit</option>
+            <option value="ca5">5th Circuit</option>
+            <option value="ca6">6th Circuit</option>
+            <option value="ca7">7th Circuit</option>
+            <option value="ca8">8th Circuit</option>
+            <option value="ca9">9th Circuit</option>
+            <option value="ca10">10th Circuit</option>
+            <option value="ca11">11th Circuit</option>
+            <option value="cadc">D.C. Circuit</option>
+            <option value="cafc">Federal Circuit</option>
+          </optgroup>
+          <optgroup label="State — Supreme Courts">
+            <option value="cal">California</option>
+            <option value="ny">New York</option>
+            <option value="tex">Texas</option>
+            <option value="fla">Florida</option>
+            <option value="ill">Illinois</option>
+            <option value="pa">Pennsylvania</option>
+            <option value="ohio">Ohio</option>
+          </optgroup>
+        </select>
+      </div>
+      <div>
+        <label for="s-after">Decided After</label>
+        <input type="date" id="s-after">
+      </div>
+      <div>
+        <label for="s-before">Decided Before</label>
+        <input type="date" id="s-before">
+      </div>
     </div>
 
-  </div><!-- /results -->
+    <button class="btn btn-primary" id="s-btn" onclick="searchCases()">
+      <span id="s-btn-txt">Search Cases</span>
+    </button>
+  </div>
 
-</main>
+  <div id="s-results" style="display:none">
+    <p class="search-count" id="s-count"></p>
+    <div id="s-list"></div>
+  </div>
+</div><!-- /tab-search -->
+
+<!-- ══════════════════ TAB: COMPARE ══════════════════ -->
+<div id="tab-compare" class="tab-pane">
+  <div class="card">
+    <div class="card-title">Compare Two Document Versions</div>
+    <p style="font-family:Arial,sans-serif;font-size:.83rem;color:var(--muted);margin-bottom:1rem">
+      Paste the original and revised versions. AI identifies every added, removed, and modified clause and tells you which party each change favors.
+    </p>
+    <div id="c-error" class="banner error"></div>
+
+    <div class="compare-cols">
+      <div>
+        <label for="c-name-a">Document A — Name</label>
+        <input type="text" id="c-name-a" placeholder="Original / v1" value="Original">
+        <label for="c-doc-a">Document A Text</label>
+        <textarea id="c-doc-a" rows="12" placeholder="Paste original document text…"></textarea>
+        <div class="file-row">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('c-file-a').click()">📂 Load file</button>
+          <span class="file-name" id="c-fname-a">—</span>
+          <input type="file" id="c-file-a" accept=".txt,.md">
+        </div>
+      </div>
+      <div>
+        <label for="c-name-b">Document B — Name</label>
+        <input type="text" id="c-name-b" placeholder="Revised / v2" value="Revised">
+        <label for="c-doc-b">Document B Text</label>
+        <textarea id="c-doc-b" rows="12" placeholder="Paste revised document text…"></textarea>
+        <div class="file-row">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('c-file-b').click()">📂 Load file</button>
+          <span class="file-name" id="c-fname-b">—</span>
+          <input type="file" id="c-file-b" accept=".txt,.md">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full" id="c-btn" onclick="runCompare()">
+      <span id="c-btn-txt">Compare Documents</span>
+    </button>
+  </div>
+
+  <div id="c-results" style="display:none">
+    <div class="card">
+      <div class="card-title">Comparison Summary</div>
+      <p style="font-size:.95rem;line-height:1.75;margin-bottom:.9rem" id="c-summary"></p>
+      <div class="ov-grid" id="c-ov"></div>
+    </div>
+
+    <div class="card" id="c-added-card">
+      <div class="card-title">Added Clauses</div>
+      <div class="item-list" id="c-added"></div>
+    </div>
+    <div class="card" id="c-removed-card">
+      <div class="card-title">Removed Clauses</div>
+      <div class="item-list" id="c-removed"></div>
+    </div>
+    <div class="card" id="c-modified-card">
+      <div class="card-title">Modified Clauses</div>
+      <div class="item-list" id="c-modified"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Key Concerns</div>
+      <ul class="blist warn" id="c-concerns"></ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Negotiation Recommendations</div>
+      <ul class="blist check" id="c-recs"></ul>
+    </div>
+
+    <p class="meta-footer" id="c-meta"></p>
+  </div>
+</div><!-- /tab-compare -->
+
+<!-- ══════════════════ TAB: ASK AI ══════════════════ -->
+<div id="tab-ask" class="tab-pane">
+  <div class="card">
+    <div class="card-title">Ask Questions About a Document</div>
+    <p style="font-family:Arial,sans-serif;font-size:.83rem;color:var(--muted);margin-bottom:1rem">
+      Load a document below (or carry it over from Analyze), then ask specific legal questions about it.
+      Follow-up questions are remembered in context.
+    </p>
+    <div id="q-error" class="banner error"></div>
+    <div id="q-info"  class="banner info"></div>
+
+    <label for="q-doc">Document Text</label>
+    <textarea id="q-doc" rows="6" placeholder="Paste the legal document text here (or use 'Ask questions →' from the Analyze tab)…"></textarea>
+
+    <div class="file-row">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('q-file').click()">📂 Load file</button>
+      <span class="file-name" id="q-fname">—</span>
+      <input type="file" id="q-file" accept=".txt,.md">
+      <button class="btn btn-ghost btn-sm" onclick="clearChat()" style="margin-left:auto">🔄 Clear chat</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Conversation</div>
+    <div class="chat-log" id="chat-log">
+      <div class="empty-state">Ask a question about the document above to get started.</div>
+    </div>
+    <hr class="divider">
+    <label for="q-input">Your Question</label>
+    <input type="text" id="q-input" placeholder="e.g. What is my liability cap? Can I terminate early? Who owns IP created during the project?"
+           onkeydown="if(event.key==='Enter')askQuestion()" style="margin-bottom:.75rem">
+    <button class="btn btn-primary btn-full" id="q-btn" onclick="askQuestion()">
+      <span id="q-btn-txt">Ask</span>
+    </button>
+  </div>
+</div><!-- /tab-ask -->
+
+</main><!-- /main -->
 
 <script>
-  // ── File loader ─────────────────────────────────────────────────────────
-  document.getElementById('file-input').addEventListener('change', function () {
-    const file = this.files[0];
-    if (!file) return;
-    document.getElementById('file-name').textContent = file.name;
-    if (!document.getElementById('case-name').value) {
-      document.getElementById('case-name').value = file.name.replace(/\.[^.]+$/, '');
-    }
-    const reader = new FileReader();
-    reader.onload = e => document.getElementById('doc-text').value = e.target.result;
-    reader.readAsText(file);
+// ═══════════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════════
+let lastAnalysis   = null;   // last AnalysisResult JSON
+let lastDocText    = '';     // document text from analyze tab
+let chatHistory    = [];     // [{q, a}] for Q&A tab
+
+// ═══════════════════════════════════════════════════════════
+// Tab switching
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + t));
   });
+});
 
-  // ── Main analysis ────────────────────────────────────────────────────────
-  async function analyzeDocument() {
-    const text     = document.getElementById('doc-text').value.trim();
-    const caseName = document.getElementById('case-name').value.trim() || 'Untitled Case';
+// ═══════════════════════════════════════════════════════════
+// File loaders
+// ═══════════════════════════════════════════════════════════
+function wireFile(inputId, textareaId, labelId, nameInputId) {
+  document.getElementById(inputId).addEventListener('change', function () {
+    const f = this.files[0]; if (!f) return;
+    if (labelId) document.getElementById(labelId).textContent = f.name;
+    if (nameInputId && !document.getElementById(nameInputId).value)
+      document.getElementById(nameInputId).value = f.name.replace(/\.[^.]+$/, '');
+    const r = new FileReader();
+    r.onload = e => { if (textareaId) document.getElementById(textareaId).value = e.target.result; };
+    r.readAsText(f);
+  });
+}
+wireFile('file-input', 'doc-text',  'file-name', 'case-name');
+wireFile('c-file-a',   'c-doc-a',   'c-fname-a', null);
+wireFile('c-file-b',   'c-doc-b',   'c-fname-b', null);
+wireFile('q-file',     'q-doc',     'q-fname',   null);
 
-    hideError();
-    if (!text) { showError('Please paste a legal document or load a file before analyzing.'); return; }
+// ═══════════════════════════════════════════════════════════
+// ── TAB 1: ANALYZE ──────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+async function runAnalysis() {
+  const text = document.getElementById('doc-text').value.trim();
+  const name = document.getElementById('case-name').value.trim() || 'Untitled';
+  hideBanner('a-error');
+  if (!text) { showBanner('a-error', 'Please paste document text or load a file.'); return; }
+  setLoading('analyze-btn', 'a-btn-txt', true, 'Analyzing…');
 
-    setLoading(true);
-
-    try {
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, caseName })
-      });
-      const data = await res.json();
-      if (!res.ok) { showError(data.error || 'Analysis failed. Please try again.'); return; }
-      renderResults(data, caseName);
-    } catch (err) {
-      showError('Network error: ' + err.message);
-    } finally {
-      setLoading(false);
-    }
+  try {
+    const res  = await fetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    const data = await res.json();
+    if (!res.ok) { showBanner('a-error', data.error || 'Analysis failed.'); return; }
+    lastAnalysis = data;
+    lastDocText  = text;
+    renderAnalysis(data, name);
+  } catch (e) {
+    showBanner('a-error', 'Network error: ' + e.message);
+  } finally {
+    setLoading('analyze-btn', 'a-btn-txt', false, 'Analyze Document');
   }
+}
 
-  // ── Render ───────────────────────────────────────────────────────────────
-  function renderResults(a, caseName) {
-    // Risk banner
-    const score = a.overall_risk_score || 0;
-    const { label, bg, fg, barColor } = riskTheme(score);
+function renderAnalysis(a, name) {
+  const score = a.overall_risk_score || 0;
+  const { label, bg, bar } = riskTheme(score);
+  const banner = document.getElementById('risk-banner');
+  banner.style.background = bg; banner.style.color = '#fff';
+  document.getElementById('risk-circle').style.background = bar;
+  document.getElementById('risk-circle').style.color      = '#fff';
+  document.getElementById('risk-num').textContent   = score;
+  document.getElementById('risk-label').textContent = label + ' RISK';
+  document.getElementById('risk-meta').textContent  =
+    `${count(a.key_clauses,'significance','HIGH')} high-significance clauses · ` +
+    `${count(a.risks,'severity','HIGH')} high-severity risks · ` +
+    `${(a.key_dates||[]).length} key dates`;
+  setTimeout(() => { const rb = document.getElementById('risk-bar'); rb.style.width = (score*10)+'%'; rb.style.background = bar; }, 80);
 
-    const banner = document.getElementById('risk-banner');
-    banner.style.background = bg;
-    banner.style.color       = fg;
+  // Overview
+  const ov = document.getElementById('ov-grid');
+  ov.innerHTML = [['Case',name],['Type',a.case_type||'—'],['Jurisdiction',a.jurisdiction||'—'],
+    ['Key Date',a.key_date||'—'],['Clauses',(a.key_clauses||[]).length],['Risks',(a.risks||[]).length]
+  ].map(([l,v])=>`<div class="ov-item"><div class="ov-label">${l}</div><div class="ov-val">${esc(String(v))}</div></div>`).join('');
+  document.getElementById('summary-txt').textContent = a.case_summary || '';
+  const pr = document.getElementById('parties-row');
+  pr.innerHTML = (a.parties_involved||[]).map(p=>`<span class="party-chip">${esc(p)}</span>`).join('');
 
-    document.getElementById('risk-num').textContent   = score;
-    document.getElementById('risk-label').textContent = label + ' RISK';
-    document.getElementById('risk-meta').textContent  =
-      `${(a.key_clauses || []).filter(c => c.significance === 'HIGH').length} high-significance clauses · ` +
-      `${(a.risks || []).filter(r => r.severity === 'HIGH').length} high-severity risks`;
-
-    const circle = document.getElementById('risk-circle');
-    circle.style.background = barColor;
-    circle.style.color      = '#fff';
-
-    setTimeout(() => {
-      document.getElementById('risk-bar').style.width     = (score * 10) + '%';
-      document.getElementById('risk-bar').style.background = barColor;
-    }, 80);
-
-    // Overview grid
-    const grid = document.getElementById('overview-grid');
-    grid.innerHTML = '';
-    [
-      ['Case Name', caseName],
-      ['Type',      a.case_type || '—'],
-      ['Jurisdiction', a.jurisdiction || '—'],
-      ['Key Date',  a.key_date   || '—'],
-      ['Clauses',   (a.key_clauses || []).length],
-      ['Risks',     (a.risks || []).length],
-    ].forEach(([lbl, val]) => {
-      grid.innerHTML += `<div class="ov-item"><div class="ov-label">${lbl}</div><div class="ov-value">${esc(String(val))}</div></div>`;
-    });
-
-    document.getElementById('summary-text').textContent = a.case_summary || '';
-
-    const partiesEl = document.getElementById('parties-list');
-    partiesEl.innerHTML = '';
-    (a.parties_involved || []).forEach(p => {
-      partiesEl.innerHTML += `<span class="party-chip">${esc(p)}</span>`;
-    });
-
-    // Key Points
-    const kpList = document.getElementById('key-points-list');
-    kpList.innerHTML = (a.key_points || []).map(p => `<li>${esc(p)}</li>`).join('');
-
-    // Key Clauses (HIGH first)
-    const clauses = [...(a.key_clauses || [])].sort((a, b) => sigW(b.significance) - sigW(a.significance));
-    document.getElementById('clause-list').innerHTML = clauses.map(c => `
-      <div class="clause-card ${esc(c.significance || 'LOW')}">
-        <div class="clause-header">
-          <span class="clause-type">${esc(c.clause_type)}</span>
-          <span class="sig-badge ${esc(c.significance || 'LOW')}">${esc(c.significance || 'LOW')}</span>
-          ${c.section && c.section !== 'Not specified' ? `<span class="clause-section">${esc(c.section)}</span>` : ''}
+  // Key Dates
+  const dates = (a.key_dates || []);
+  if (dates.length) {
+    document.getElementById('dates-list').innerHTML = [...dates]
+      .sort((a,b) => sigW(b.urgency) - sigW(a.urgency))
+      .map(d => `<div class="item-card ${esc(d.urgency||'LOW')}">
+        <div class="item-header">
+          <span class="item-type">${esc(d.date)}</span>
+          <span class="badge ${esc(d.urgency||'LOW')}">${esc(d.urgency||'LOW')}</span>
+          <span class="badge blue" style="margin-left:auto">${esc(d.deadline_type||'')}</span>
         </div>
-        ${c.clause_text ? `<div class="clause-text">${esc(c.clause_text)}</div>` : ''}
-        <div class="clause-explanation">${esc(c.explanation || '')}</div>
+        <div class="item-body">${esc(d.description)}</div>
       </div>`).join('');
+    document.getElementById('dates-card').style.display = '';
+  } else {
+    document.getElementById('dates-card').style.display = 'none';
+  }
 
-    // Risks (HIGH first)
-    const risks = [...(a.risks || [])].sort((a, b) => sigW(b.severity) - sigW(a.severity));
-    document.getElementById('risk-list').innerHTML = risks.map(r => `
-      <div class="risk-card ${esc(r.severity || 'LOW')}">
-        <div class="risk-header">
-          <span class="risk-id">${esc(r.risk_id || '')}</span>
-          <span class="sig-badge ${esc(r.severity || 'LOW')}">${esc(r.severity || 'LOW')}</span>
-          <span class="risk-title">${esc(r.title || '')}</span>
-          <span class="risk-category">${esc(r.category || '')}</span>
+  // Key Points
+  document.getElementById('kp-list').innerHTML = (a.key_points||[]).map(p=>`<li>${esc(p)}</li>`).join('');
+
+  // Clauses
+  document.getElementById('clause-list').innerHTML = [...(a.key_clauses||[])]
+    .sort((a,b)=>sigW(b.significance)-sigW(a.significance))
+    .map(c=>`<div class="item-card ${esc(c.significance||'LOW')}">
+      <div class="item-header">
+        <span class="item-type">${esc(c.clause_type)}</span>
+        <span class="badge ${esc(c.significance||'LOW')}">${esc(c.significance)}</span>
+        ${c.section&&c.section!=='Not specified'?`<span class="item-section">${esc(c.section)}</span>`:''}
+      </div>
+      ${c.clause_text?`<div class="item-quote">${esc(c.clause_text)}</div>`:''}
+      <div class="item-body">${esc(c.explanation)}</div>
+    </div>`).join('');
+
+  // Risks
+  document.getElementById('risk-list').innerHTML = [...(a.risks||[])]
+    .sort((a,b)=>sigW(b.severity)-sigW(a.severity))
+    .map(r=>`<div class="item-card ${esc(r.severity||'LOW')}">
+      <div class="item-header">
+        <span class="item-type">${esc(r.risk_id)} — ${esc(r.title)}</span>
+        <span class="badge ${esc(r.severity||'LOW')}">${esc(r.severity)}</span>
+        <span class="item-section">${esc(r.category)}</span>
+      </div>
+      <div class="item-body">${esc(r.description)}</div>
+      ${r.affected_clause?`<div class="item-body" style="color:var(--muted);font-size:.78rem;margin-top:.3rem">Clause: ${esc(r.affected_clause)}</div>`:''}
+      ${r.recommendation?`<div class="item-action">${esc(r.recommendation)}</div>`:''}
+    </div>`).join('');
+
+  // Negotiation Points
+  const npts = (a.negotiation_points || []);
+  if (npts.length) {
+    document.getElementById('neg-list').innerHTML = npts.map(n=>`<div class="item-card neutral">
+      <div class="item-header">
+        <span class="item-type">${esc(n.clause_type)}</span>
+        <span class="badge blue">Negotiable</span>
+        ${n.favorable_to?`<span class="item-section">Currently favors: ${esc(n.favorable_to)}</span>`:''}
+      </div>
+      <div class="item-body" style="margin-bottom:.4rem"><strong>Issue:</strong> ${esc(n.issue)}</div>
+      <div class="item-quote">${esc(n.current_position)}</div>
+      ${n.suggested_alternative?`<div class="item-action">${esc(n.suggested_alternative)}</div>`:''}
+    </div>`).join('');
+    document.getElementById('neg-card').style.display = '';
+  } else {
+    document.getElementById('neg-card').style.display = 'none';
+  }
+
+  // Actions
+  document.getElementById('actions-list').innerHTML = (a.recommended_actions||[]).map(a=>`<li>${esc(a)}</li>`).join('');
+
+  // Meta
+  if (a._meta) document.getElementById('a-meta').textContent =
+    `Model: ${a._meta.model} · ${(a._meta.inputTokens||0).toLocaleString()} input / ${(a._meta.outputTokens||0).toLocaleString()} output tokens`;
+
+  document.getElementById('input-card').style.display = 'none';
+  document.getElementById('results').style.display    = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAnalyze() {
+  document.getElementById('results').style.display    = 'none';
+  document.getElementById('input-card').style.display = '';
+  document.getElementById('doc-text').value  = '';
+  document.getElementById('case-name').value = '';
+  document.getElementById('file-name').textContent = 'No file chosen (.txt or .md)';
+  document.getElementById('file-input').value = '';
+  hideBanner('a-error');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function useInAsk() {
+  if (!lastDocText) return;
+  document.getElementById('q-doc').value = lastDocText;
+  document.querySelector('[data-tab="ask"]').click();
+  showBanner('q-info', 'Document loaded from Analyze tab. Type your question below.');
+}
+
+// Export helpers
+function exportTxt() {
+  if (!lastAnalysis) return;
+  const a = lastAnalysis, lines = [];
+  lines.push('LEGAL CASE ANALYSIS', '='.repeat(60), '');
+  lines.push('Summary:', a.case_summary||'', '');
+  lines.push(`Risk Score: ${a.overall_risk_score}/10  [${riskTheme(a.overall_risk_score).label}]`, '');
+  lines.push('Key Dates:');
+  (a.key_dates||[]).forEach(d => lines.push(`  [${d.urgency}] ${d.date} — ${d.description}`));
+  lines.push('', 'Clauses:');
+  (a.key_clauses||[]).forEach(c => lines.push(`  [${c.significance}] ${c.clause_type}: ${c.explanation}`));
+  lines.push('', 'Risks:');
+  (a.risks||[]).forEach(r => lines.push(`  [${r.severity}] ${r.title}: ${r.description}`));
+  lines.push('', 'Negotiation Points:');
+  (a.negotiation_points||[]).forEach(n => lines.push(`  ${n.clause_type}: ${n.issue} → ${n.suggested_alternative}`));
+  lines.push('', 'Recommended Actions:');
+  (a.recommended_actions||[]).forEach((ac,i) => lines.push(`  ${i+1}. ${ac}`));
+  download(lines.join('\n'), 'legal-analysis.txt', 'text/plain');
+}
+function exportJson() {
+  if (!lastAnalysis) return;
+  download(JSON.stringify(lastAnalysis, null, 2), 'legal-analysis.json', 'application/json');
+}
+function download(content, filename, mime) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type: mime }));
+  a.download = filename; a.click();
+}
+
+// ═══════════════════════════════════════════════════════════
+// ── TAB 2: CASE SEARCH ──────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+async function searchCases() {
+  const q = document.getElementById('s-query').value.trim();
+  hideBanner('s-error');
+  if (!q) { showBanner('s-error', 'Please enter a search query.'); return; }
+  setLoading('s-btn', 's-btn-txt', true, 'Searching…');
+
+  const params = new URLSearchParams({ q });
+  const court  = document.getElementById('s-court').value;
+  const after  = document.getElementById('s-after').value;
+  const before = document.getElementById('s-before').value;
+  if (court !== 'all') params.set('court', court);
+  if (after)  params.set('filed_after',  after);
+  if (before) params.set('filed_before', before);
+
+  try {
+    const res  = await fetch('/api/search-cases?' + params);
+    const data = await res.json();
+    if (!res.ok) { showBanner('s-error', data.error || 'Search failed.'); return; }
+    renderSearchResults(data);
+  } catch (e) {
+    showBanner('s-error', 'Network error: ' + e.message);
+  } finally {
+    setLoading('s-btn', 's-btn-txt', false, 'Search Cases');
+  }
+}
+
+function renderSearchResults(data) {
+  const results = data.results || [];
+  document.getElementById('s-count').textContent =
+    results.length ? `${(data.count||results.length).toLocaleString()} opinions found — showing ${results.length}` : 'No results found.';
+
+  document.getElementById('s-list').innerHTML = results.length
+    ? results.map(r => `<div class="case-card">
+        <div class="case-name"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:none">${esc(r.name)}</a></div>
+        <div class="case-meta">
+          ${r.court?`<span>${esc(r.court)}</span>`:''}
+          ${r.date?`<span>${esc(r.date)}</span>`:''}
+          ${r.citation?`<span>${esc(r.citation)}</span>`:''}
+          ${r.status?`<span>${esc(r.status)}</span>`:''}
         </div>
-        <div class="risk-desc">${esc(r.description || '')}</div>
-        ${r.affected_clause ? `<div class="risk-affected">Clause: ${esc(r.affected_clause)}</div>` : ''}
-        ${r.recommendation  ? `<div class="risk-action">${esc(r.recommendation)}</div>` : ''}
-      </div>`).join('');
+        ${r.snippet?`<div class="case-snippet">${esc(r.snippet)}</div>`:''}
+        <a class="btn btn-outline btn-sm" href="${esc(r.url)}" target="_blank" rel="noopener">Read Full Opinion ↗</a>
+      </div>`).join('')
+    : '<div class="empty-state">No matching opinions found. Try broadening your search terms or removing filters.</div>';
 
-    // Recommended Actions
-    document.getElementById('actions-list').innerHTML =
-      (a.recommended_actions || []).map(act => `<li>${esc(act)}</li>`).join('');
+  document.getElementById('s-results').style.display = 'block';
+}
 
-    // Meta footer
-    if (a._meta) {
-      document.getElementById('meta-footer').textContent =
-        `Model: ${a._meta.model || 'claude-sonnet-4-6'} · Input tokens: ${(a._meta.inputTokens || 0).toLocaleString()} · Output tokens: ${(a._meta.outputTokens || 0).toLocaleString()}`;
-    }
+// ═══════════════════════════════════════════════════════════
+// ── TAB 3: COMPARE ──────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+async function runCompare() {
+  const docA  = document.getElementById('c-doc-a').value.trim();
+  const docB  = document.getElementById('c-doc-b').value.trim();
+  const nameA = document.getElementById('c-name-a').value.trim() || 'Document A';
+  const nameB = document.getElementById('c-name-b').value.trim() || 'Document B';
+  hideBanner('c-error');
+  if (!docA || !docB) { showBanner('c-error', 'Please provide text for both documents.'); return; }
+  setLoading('c-btn', 'c-btn-txt', true, 'Comparing…');
 
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try {
+    const res  = await fetch('/api/compare', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ docA, docB, nameA, nameB }) });
+    const data = await res.json();
+    if (!res.ok) { showBanner('c-error', data.error || 'Comparison failed.'); return; }
+    renderCompare(data, nameA, nameB);
+  } catch (e) {
+    showBanner('c-error', 'Network error: ' + e.message);
+  } finally {
+    setLoading('c-btn', 'c-btn-txt', false, 'Compare Documents');
   }
+}
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
-  function riskTheme(score) {
-    if (score >= 9) return { label: 'CRITICAL', bg: '#3b0000', fg: '#fff', barColor: '#b91c1c' };
-    if (score >= 7) return { label: 'HIGH',     bg: '#3b1500', fg: '#fff', barColor: '#dc2626' };
-    if (score >= 5) return { label: 'MEDIUM',   bg: '#3b2700', fg: '#fff', barColor: '#d97706' };
-    if (score >= 3) return { label: 'LOW',      bg: '#0d3322', fg: '#fff', barColor: '#16a34a' };
-    return               { label: 'MINIMAL',   bg: '#0a2e1a', fg: '#fff', barColor: '#15803d' };
+function renderCompare(d, nameA, nameB) {
+  document.getElementById('c-summary').textContent = d.summary || '';
+
+  const riskColors = { INCREASED: '#fef2f2', DECREASED: '#f0fdf4', UNCHANGED: '#eff6ff' };
+  const riskBorder = { INCREASED: 'var(--red)', DECREASED: 'var(--green)', UNCHANGED: 'var(--blue)' };
+  const rc = d.risk_change || 'UNCHANGED';
+  document.getElementById('c-ov').innerHTML = [
+    ['Risk Change', rc],
+    ['Explanation', d.risk_change_explanation || '—'],
+    ['Revised Version Favors', d.favors || '—'],
+    ['Clauses Added',   (d.added_clauses   || []).length],
+    ['Clauses Removed', (d.removed_clauses || []).length],
+    ['Clauses Modified',(d.modified_clauses|| []).length],
+  ].map(([l,v]) => `<div class="ov-item" style="background:${l==='Risk Change'?riskColors[rc]:'#faf9f6'};border-left:3px solid ${l==='Risk Change'?riskBorder[rc]:'var(--border)'}">
+    <div class="ov-label">${l}</div><div class="ov-val" style="font-size:.82rem">${esc(String(v))}</div>
+  </div>`).join('');
+
+  function renderChanges(containerId, cardId, items, changeType) {
+    if (!items?.length) { document.getElementById(cardId).style.display = 'none'; return; }
+    document.getElementById(cardId).style.display = '';
+    document.getElementById(containerId).innerHTML = items.map(i => `<div class="item-card ${changeType}">
+      <div class="item-header">
+        <span class="item-type">${esc(i.clause_type)}</span>
+        <span class="badge ${changeType}">${changeType}</span>
+        ${i.severity?`<span class="badge ${esc(i.severity)}">${esc(i.severity)}</span>`:''}
+      </div>
+      <div class="item-body" style="margin-bottom:.4rem">${esc(i.description||i.impact||'')}</div>
+      ${i.impact&&i.description?`<div class="item-body" style="color:var(--muted);font-size:.8rem">Impact: ${esc(i.impact)}</div>`:''}
+      ${i.original?`<div class="item-quote"><strong>Was:</strong> ${esc(i.original)}</div>`:''}
+      ${i.revised ?`<div class="item-quote"><strong>Now:</strong> ${esc(i.revised)}</div>`:''}
+      ${i.favors  ?`<div class="item-body" style="font-size:.78rem;color:var(--muted)">Favors: ${esc(i.favors)}</div>`:''}
+    </div>`).join('');
   }
-  function sigW(s) { return s === 'HIGH' ? 3 : s === 'MEDIUM' ? 2 : 1; }
-  function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  renderChanges('c-added',    'c-added-card',    d.added_clauses,    'ADDED');
+  renderChanges('c-removed',  'c-removed-card',  d.removed_clauses,  'REMOVED');
+  renderChanges('c-modified', 'c-modified-card', d.modified_clauses, 'MODIFIED');
+
+  document.getElementById('c-concerns').innerHTML = (d.key_concerns||[]).map(c=>`<li>${esc(c)}</li>`).join('');
+  document.getElementById('c-recs').innerHTML     = (d.negotiation_recommendations||[]).map(r=>`<li>${esc(r)}</li>`).join('');
+  if (d._meta) document.getElementById('c-meta').textContent =
+    `${(d._meta.inputTokens||0).toLocaleString()} input / ${(d._meta.outputTokens||0).toLocaleString()} output tokens`;
+
+  document.getElementById('c-results').style.display = 'block';
+  document.getElementById('c-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// ── TAB 4: ASK AI ────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+async function askQuestion() {
+  const question = document.getElementById('q-input').value.trim();
+  const docText  = document.getElementById('q-doc').value.trim();
+  hideBanner('q-error'); hideBanner('q-info');
+  if (!docText)   { showBanner('q-error', 'Please paste or load a document first.'); return; }
+  if (!question)  { showBanner('q-error', 'Please type a question.'); return; }
+  setLoading('q-btn', 'q-btn-txt', true, 'Thinking…');
+
+  // Optimistically show question in chat
+  appendChat('q', question);
+  document.getElementById('q-input').value = '';
+
+  try {
+    const res  = await fetch('/api/ask', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, documentText: docText, history: chatHistory })
+    });
+    const data = await res.json();
+    if (!res.ok) { appendChat('a', '⚠ Error: ' + (data.error || 'Request failed.')); return; }
+    appendChat('a', data.answer || '(No response)');
+    chatHistory.push({ q: question, a: data.answer || '' });
+  } catch (e) {
+    appendChat('a', '⚠ Network error: ' + e.message);
+  } finally {
+    setLoading('q-btn', 'q-btn-txt', false, 'Ask');
   }
-  function showError(msg) {
-    const el = document.getElementById('error-banner');
-    el.textContent = msg;
-    el.style.display = 'block';
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-  function hideError() { document.getElementById('error-banner').style.display = 'none'; }
-  function setLoading(on) {
-    const btn  = document.getElementById('analyze-btn');
-    const text = document.getElementById('btn-text');
-    btn.disabled = on;
-    if (on) {
-      text.textContent = 'Analyzing…';
-      const spinner = document.createElement('span');
-      spinner.className = 'spinner';
-      spinner.id = 'spinner';
-      btn.appendChild(spinner);
-    } else {
-      text.textContent = 'Analyze Document';
-      const sp = document.getElementById('spinner');
-      if (sp) sp.remove();
-    }
-  }
-  function resetForm() {
-    document.getElementById('results').style.display = 'none';
-    document.getElementById('doc-text').value = '';
-    document.getElementById('case-name').value = '';
-    document.getElementById('file-name').textContent = 'No file chosen (.txt or .md)';
-    document.getElementById('file-input').value = '';
-    hideError();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+}
+
+function appendChat(role, text) {
+  const log = document.getElementById('chat-log');
+  // Clear empty state
+  const empty = log.querySelector('.empty-state');
+  if (empty) empty.remove();
+  const div = document.createElement('div');
+  div.className = role === 'q' ? 'chat-q' : 'chat-a';
+  div.textContent = text;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function clearChat() {
+  chatHistory = [];
+  document.getElementById('chat-log').innerHTML = '<div class="empty-state">Ask a question about the document above to get started.</div>';
+  hideBanner('q-error'); hideBanner('q-info');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Shared utilities
+// ═══════════════════════════════════════════════════════════
+function riskTheme(score) {
+  if (score >= 9) return { label:'CRITICAL', bg:'#3b0000', bar:'#b91c1c' };
+  if (score >= 7) return { label:'HIGH',     bg:'#3b1500', bar:'#dc2626' };
+  if (score >= 5) return { label:'MEDIUM',   bg:'#3b2700', bar:'#d97706' };
+  if (score >= 3) return { label:'LOW',      bg:'#0d3322', bar:'#16a34a' };
+  return               { label:'MINIMAL',   bg:'#0a2e1a', bar:'#15803d' };
+}
+function sigW(s) { return s==='HIGH'?3 : s==='MEDIUM'?2 : 1; }
+function count(arr, field, val) { return (arr||[]).filter(x=>x[field]===val).length; }
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showBanner(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+}
+function hideBanner(id) { document.getElementById(id).style.display = 'none'; }
+function setLoading(btnId, txtId, on, label) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = on;
+  document.getElementById(txtId).textContent = label;
+  const existing = btn.querySelector('.spinner');
+  if (on && !existing) { const sp = document.createElement('span'); sp.className='spinner'; btn.appendChild(sp); }
+  if (!on && existing) existing.remove();
+}
 </script>
-
 </body>
 </html>
