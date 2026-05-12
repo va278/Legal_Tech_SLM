@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal Case Analyzer — AI-Powered</title>
+  <style>
+    :root {
+      --navy:       #1e3a5f;
+      --navy-dark:  #152b47;
+      --gold:       #c9a227;
+      --gold-light: #f0d878;
+      --bg:         #f4f1eb;
+      --surface:    #ffffff;
+      --border:     #ddd8cc;
+      --text:       #1a1a2e;
+      --muted:      #6b7280;
+      --red:        #dc2626;
+      --red-bg:     #fef2f2;
+      --amber:      #d97706;
+      --amber-bg:   #fffbeb;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --radius:     10px;
+      --shadow:     0 2px 12px rgba(0,0,0,.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    /* ── Header ──────────────────────────────────────────── */
+    header {
+      background: var(--navy);
+      color: #fff;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 64px;
+      border-bottom: 3px solid var(--gold);
+    }
+    header .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: .02em; }
+    header .logo span { color: var(--gold); }
+    header .tagline {
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem;
+      color: #a0b4cc;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    /* ── Layout ──────────────────────────────────────────── */
+    main { max-width: 900px; margin: 2.5rem auto; padding: 0 1.25rem; }
+    /* ── Card ────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 1.25rem;
+      padding-bottom: .6rem;
+      border-bottom: 2px solid var(--gold);
+      font-family: 'Arial', sans-serif;
+    }
+    /* ── Form ────────────────────────────────────────────── */
+    label {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: .4rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    input[type=text], textarea {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: .65rem .9rem;
+      font-size: .95rem;
+      font-family: 'Georgia', serif;
+      color: var(--text);
+      background: #faf9f6;
+      transition: border-color .15s;
+      margin-bottom: 1.1rem;
+    }
+    input[type=text]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--navy);
+      background: #fff;
+    }
+    textarea { height: 260px; resize: vertical; line-height: 1.6; }
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.1rem;
+    }
+    .file-btn {
+      font-family: 'Arial', sans-serif;
+      font-size: .8rem;
+      padding: .45rem .9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      background: #faf9f6;
+      cursor: pointer;
+      color: var(--navy);
+      font-weight: 600;
+      letter-spacing: .04em;
+      transition: background .15s;
+    }
+    .file-btn:hover { background: #ece9e1; }
+    .file-name { font-family: 'Arial', sans-serif; font-size: .82rem; color: var(--muted); }
+    #file-input { display: none; }
+    .btn-analyze {
+      width: 100%;
+      padding: .85rem;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Arial', sans-serif;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+    }
+    .btn-analyze:hover:not(:disabled) { background: var(--navy-dark); }
+    .btn-analyze:active:not(:disabled) { transform: scale(.99); }
+    .btn-analyze:disabled { opacity: .6; cursor: not-allowed; }
+    /* ── Spinner ─────────────────────────────────────────── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── Error banner ────────────────────────────────────── */
+    .error-banner {
+      background: var(--red-bg);
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: .9rem 1.1rem;
+      color: var(--red);
+      font-family: 'Arial', sans-serif;
+      font-size: .88rem;
+      margin-bottom: 1.25rem;
+      display: none;
+    }
+    /* ── Risk score banner ───────────────────────────────── */
+    .risk-banner {
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .risk-score-circle {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .risk-score-circle .num  { font-size: 1.8rem; line-height: 1; }
+    .risk-score-circle .denom { font-size: .7rem; opacity: .75; }
+    .risk-info { flex: 1; }
+    .risk-label { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+    .risk-bar-wrap { background: rgba(0,0,0,.1); border-radius: 999px; height: 8px; }
+    .risk-bar      { height: 8px; border-radius: 999px; transition: width .6s ease; }
+    .risk-meta     { font-size: .78rem; margin-top: .4rem; opacity: .8; }
+    /* ── Overview grid ───────────────────────────────────── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .9rem;
+      margin-bottom: 1.25rem;
+    }
+    .ov-item { background: #faf9f6; border-radius: 8px; padding: .7rem .9rem; border: 1px solid var(--border); }
+    .ov-label { font-family: 'Arial', sans-serif; font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .25rem; }
+    .ov-value { font-size: .9rem; font-weight: bold; color: var(--navy); }
+    /* ── Summary ─────────────────────────────────────────── */
+    .summary-text { font-size: .97rem; line-height: 1.75; color: var(--text); margin-bottom: .5rem; }
+    .parties-list { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+    .party-chip {
+      background: #eef2f9;
+      border: 1px solid #c3cfe2;
+      color: var(--navy);
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+    }
+    /* ── Clause cards ────────────────────────────────────── */
+    .clause-list { display: flex; flex-direction: column; gap: .85rem; }
+    .clause-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid;
+    }
+    .clause-card.HIGH   { border-left-color: var(--red);   background: #fffafa; }
+    .clause-card.MEDIUM { border-left-color: var(--amber); background: #fffdf5; }
+    .clause-card.LOW    { border-left-color: var(--green); background: #f8fffe; }
+    .clause-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+    .clause-type { font-family: 'Arial', sans-serif; font-size: .82rem; font-weight: 700; color: var(--navy); }
+    .sig-badge {
+      font-family: 'Arial', sans-serif;
+      font-size: .68rem;
+      font-weight: 800;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .sig-badge.HIGH   { background: var(--red-bg);   color: var(--red);   border: 1px solid #fca5a5; }
+    .sig-badge.MEDIUM { background: var(--amber-bg); color: var(--amber); border: 1px solid #fcd34d; }
+    .sig-badge.LOW    { background: var(--green-bg); color: var(--green); border: 1px solid #86efac; }
+    .clause-section { font-family: 'Arial', sans-serif; font-size: .72rem; color: var(--muted); margin-left: auto; }
+    .clause-text {
+      font-size: .84rem;
+      color: #444;
+      font-style: italic;
+      margin-bottom: .5rem;
+      line-height: 1.55;
+      border-left: 2px solid #ddd;
+      padding-left: .65rem;
+    }
+    .clause-explanation { font-family: 'Arial', sans-serif; font-size: .84rem; color: var(--text); line-height: 1.5; }
+    /* ── Risk cards ──────────────────────────────────────── */
+    .risk-list { display: flex; flex-direction: column; gap: .85rem; }
+    .risk-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid;
+    }
+    .risk-card.HIGH   { border-left-color: var(--red);   background: #fffafa; }
+    .risk-card.MEDIUM { border-left-color: var(--amber); background: #fffdf5; }
+    .risk-card.LOW    { border-left-color: var(--green); background: #f8fffe; }
+    .risk-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .45rem; }
+    .risk-id { font-family: 'Arial', sans-serif; font-size: .72rem; color: var(--muted); font-weight: 600; }
+    .risk-title { font-family: 'Arial', sans-serif; font-size: .88rem; font-weight: 700; color: var(--navy); }
+    .risk-category { font-family: 'Arial', sans-serif; font-size: .72rem; color: var(--muted); margin-left: auto; }
+    .risk-desc { font-family: 'Arial', sans-serif; font-size: .84rem; line-height: 1.5; color: var(--text); margin-bottom: .5rem; }
+    .risk-affected { font-family: 'Arial', sans-serif; font-size: .78rem; color: var(--muted); margin-bottom: .35rem; }
+    .risk-action {
+      font-family: 'Arial', sans-serif;
+      font-size: .82rem;
+      background: #f0f4ff;
+      border: 1px solid #c7d7f9;
+      border-radius: 6px;
+      padding: .45rem .7rem;
+      color: var(--navy);
+      line-height: 1.45;
+    }
+    .risk-action::before { content: '→ '; font-weight: 700; }
+    /* ── Lists ───────────────────────────────────────────── */
+    .point-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+    .point-list li {
+      font-family: 'Arial', sans-serif;
+      font-size: .88rem;
+      line-height: 1.55;
+      padding-left: 1.4rem;
+      position: relative;
+      color: var(--text);
+    }
+    .point-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: .9rem;
+    }
+    .action-list li::before { content: '✔'; color: var(--green); }
+    /* ── Meta footer ─────────────────────────────────────── */
+    .meta-footer {
+      font-family: 'Arial', sans-serif;
+      font-size: .75rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: .5rem;
+    }
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      header .tagline { display: none; }
+      .card { padding: 1.25rem 1rem; }
+      .overview-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚖ Legal<span>AI</span></div>
+  <div class="tagline">Powered by Claude · AI Legal Analysis</div>
+</header>
+
+<main>
+
+  <!-- Input card -->
+  <div class="card" id="input-card">
+    <div class="card-title">Analyze a Legal Document</div>
+
+    <div id="error-banner" class="error-banner"></div>
+
+    <label for="case-name">Case / Document Name</label>
+    <input type="text" id="case-name" placeholder="e.g. Vendor Agreement — Acme Corp" maxlength="120">
+
+    <label for="doc-text">Paste Document Text</label>
+    <textarea id="doc-text" placeholder="Paste the full text of the legal document here — contracts, agreements, court filings, regulatory notices, NDAs, and more."></textarea>
+
+    <div class="file-row">
+      <button class="file-btn" onclick="document.getElementById('file-input').click()">📂 Load from file</button>
+      <span class="file-name" id="file-name">No file chosen (.txt or .md)</span>
+      <input type="file" id="file-input" accept=".txt,.md,.text">
+    </div>
+
+    <button class="btn-analyze" id="analyze-btn" onclick="analyzeDocument()">
+      <span id="btn-text">Analyze Document</span>
+    </button>
+  </div>
+
+  <!-- Results (hidden until analysis completes) -->
+  <div id="results" style="display:none">
+
+    <!-- Risk banner -->
+    <div class="risk-banner" id="risk-banner">
+      <div class="risk-score-circle" id="risk-circle">
+        <span class="num" id="risk-num">—</span>
+        <span class="denom">/10</span>
+      </div>
+      <div class="risk-info">
+        <div class="risk-label" id="risk-label">—</div>
+        <div class="risk-bar-wrap">
+          <div class="risk-bar" id="risk-bar" style="width:0%"></div>
+        </div>
+        <div class="risk-meta" id="risk-meta"></div>
+      </div>
+    </div>
+
+    <!-- Overview -->
+    <div class="card">
+      <div class="card-title">Case Overview</div>
+      <div class="overview-grid" id="overview-grid"></div>
+      <p class="summary-text" id="summary-text"></p>
+      <div class="parties-list" id="parties-list"></div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="card" id="key-points-card">
+      <div class="card-title">Key Points</div>
+      <ul class="point-list" id="key-points-list"></ul>
+    </div>
+
+    <!-- Key Clauses -->
+    <div class="card" id="clauses-card">
+      <div class="card-title">Key Clauses</div>
+      <div class="clause-list" id="clause-list"></div>
+    </div>
+
+    <!-- Risks -->
+    <div class="card" id="risks-card">
+      <div class="card-title">Identified Risks</div>
+      <div class="risk-list" id="risk-list"></div>
+    </div>
+
+    <!-- Recommended Actions -->
+    <div class="card" id="actions-card">
+      <div class="card-title">Recommended Actions</div>
+      <ul class="point-list action-list" id="actions-list"></ul>
+    </div>
+
+    <p class="meta-footer" id="meta-footer"></p>
+
+    <!-- Analyze another -->
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <button class="btn-analyze" style="width:auto;padding:.7rem 2rem;font-size:.85rem"
+              onclick="resetForm()">Analyze Another Document</button>
+    </div>
+
+  </div><!-- /results -->
+
+</main>
+
+<script>
+  // ── File loader ─────────────────────────────────────────────────────────
+  document.getElementById('file-input').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    document.getElementById('file-name').textContent = file.name;
+    if (!document.getElementById('case-name').value) {
+      document.getElementById('case-name').value = file.name.replace(/\.[^.]+$/, '');
+    }
+    const reader = new FileReader();
+    reader.onload = e => document.getElementById('doc-text').value = e.target.result;
+    reader.readAsText(file);
+  });
+
+  // ── Main analysis ────────────────────────────────────────────────────────
+  async function analyzeDocument() {
+    const text     = document.getElementById('doc-text').value.trim();
+    const caseName = document.getElementById('case-name').value.trim() || 'Untitled Case';
+
+    hideError();
+    if (!text) { showError('Please paste a legal document or load a file before analyzing.'); return; }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, caseName })
+      });
+      const data = await res.json();
+      if (!res.ok) { showError(data.error || 'Analysis failed. Please try again.'); return; }
+      renderResults(data, caseName);
+    } catch (err) {
+      showError('Network error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────────
+  function renderResults(a, caseName) {
+    // Risk banner
+    const score = a.overall_risk_score || 0;
+    const { label, bg, fg, barColor } = riskTheme(score);
+
+    const banner = document.getElementById('risk-banner');
+    banner.style.background = bg;
+    banner.style.color       = fg;
+
+    document.getElementById('risk-num').textContent   = score;
+    document.getElementById('risk-label').textContent = label + ' RISK';
+    document.getElementById('risk-meta').textContent  =
+      `${(a.key_clauses || []).filter(c => c.significance === 'HIGH').length} high-significance clauses · ` +
+      `${(a.risks || []).filter(r => r.severity === 'HIGH').length} high-severity risks`;
+
+    const circle = document.getElementById('risk-circle');
+    circle.style.background = barColor;
+    circle.style.color      = '#fff';
+
+    setTimeout(() => {
+      document.getElementById('risk-bar').style.width     = (score * 10) + '%';
+      document.getElementById('risk-bar').style.background = barColor;
+    }, 80);
+
+    // Overview grid
+    const grid = document.getElementById('overview-grid');
+    grid.innerHTML = '';
+    [
+      ['Case Name', caseName],
+      ['Type',      a.case_type || '—'],
+      ['Jurisdiction', a.jurisdiction || '—'],
+      ['Key Date',  a.key_date   || '—'],
+      ['Clauses',   (a.key_clauses || []).length],
+      ['Risks',     (a.risks || []).length],
+    ].forEach(([lbl, val]) => {
+      grid.innerHTML += `<div class="ov-item"><div class="ov-label">${lbl}</div><div class="ov-value">${esc(String(val))}</div></div>`;
+    });
+
+    document.getElementById('summary-text').textContent = a.case_summary || '';
+
+    const partiesEl = document.getElementById('parties-list');
+    partiesEl.innerHTML = '';
+    (a.parties_involved || []).forEach(p => {
+      partiesEl.innerHTML += `<span class="party-chip">${esc(p)}</span>`;
+    });
+
+    // Key Points
+    const kpList = document.getElementById('key-points-list');
+    kpList.innerHTML = (a.key_points || []).map(p => `<li>${esc(p)}</li>`).join('');
+
+    // Key Clauses (HIGH first)
+    const clauses = [...(a.key_clauses || [])].sort((a, b) => sigW(b.significance) - sigW(a.significance));
+    document.getElementById('clause-list').innerHTML = clauses.map(c => `
+      <div class="clause-card ${esc(c.significance || 'LOW')}">
+        <div class="clause-header">
+          <span class="clause-type">${esc(c.clause_type)}</span>
+          <span class="sig-badge ${esc(c.significance || 'LOW')}">${esc(c.significance || 'LOW')}</span>
+          ${c.section && c.section !== 'Not specified' ? `<span class="clause-section">${esc(c.section)}</span>` : ''}
+        </div>
+        ${c.clause_text ? `<div class="clause-text">${esc(c.clause_text)}</div>` : ''}
+        <div class="clause-explanation">${esc(c.explanation || '')}</div>
+      </div>`).join('');
+
+    // Risks (HIGH first)
+    const risks = [...(a.risks || [])].sort((a, b) => sigW(b.severity) - sigW(a.severity));
+    document.getElementById('risk-list').innerHTML = risks.map(r => `
+      <div class="risk-card ${esc(r.severity || 'LOW')}">
+        <div class="risk-header">
+          <span class="risk-id">${esc(r.risk_id || '')}</span>
+          <span class="sig-badge ${esc(r.severity || 'LOW')}">${esc(r.severity || 'LOW')}</span>
+          <span class="risk-title">${esc(r.title || '')}</span>
+          <span class="risk-category">${esc(r.category || '')}</span>
+        </div>
+        <div class="risk-desc">${esc(r.description || '')}</div>
+        ${r.affected_clause ? `<div class="risk-affected">Clause: ${esc(r.affected_clause)}</div>` : ''}
+        ${r.recommendation  ? `<div class="risk-action">${esc(r.recommendation)}</div>` : ''}
+      </div>`).join('');
+
+    // Recommended Actions
+    document.getElementById('actions-list').innerHTML =
+      (a.recommended_actions || []).map(act => `<li>${esc(act)}</li>`).join('');
+
+    // Meta footer
+    if (a._meta) {
+      document.getElementById('meta-footer').textContent =
+        `Model: ${a._meta.model || 'claude-sonnet-4-6'} · Input tokens: ${(a._meta.inputTokens || 0).toLocaleString()} · Output tokens: ${(a._meta.outputTokens || 0).toLocaleString()}`;
+    }
+
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function riskTheme(score) {
+    if (score >= 9) return { label: 'CRITICAL', bg: '#3b0000', fg: '#fff', barColor: '#b91c1c' };
+    if (score >= 7) return { label: 'HIGH',     bg: '#3b1500', fg: '#fff', barColor: '#dc2626' };
+    if (score >= 5) return { label: 'MEDIUM',   bg: '#3b2700', fg: '#fff', barColor: '#d97706' };
+    if (score >= 3) return { label: 'LOW',      bg: '#0d3322', fg: '#fff', barColor: '#16a34a' };
+    return               { label: 'MINIMAL',   bg: '#0a2e1a', fg: '#fff', barColor: '#15803d' };
+  }
+  function sigW(s) { return s === 'HIGH' ? 3 : s === 'MEDIUM' ? 2 : 1; }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function showError(msg) {
+    const el = document.getElementById('error-banner');
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function hideError() { document.getElementById('error-banner').style.display = 'none'; }
+  function setLoading(on) {
+    const btn  = document.getElementById('analyze-btn');
+    const text = document.getElementById('btn-text');
+    btn.disabled = on;
+    if (on) {
+      text.textContent = 'Analyzing…';
+      const spinner = document.createElement('span');
+      spinner.className = 'spinner';
+      spinner.id = 'spinner';
+      btn.appendChild(spinner);
+    } else {
+      text.textContent = 'Analyze Document';
+      const sp = document.getElementById('spinner');
+      if (sp) sp.remove();
+    }
+  }
+  function resetForm() {
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('doc-text').value = '';
+    document.getElementById('case-name').value = '';
+    document.getElementById('file-name').textContent = 'No file chosen (.txt or .md)';
+    document.getElementById('file-input').value = '';
+    hideError();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
