@@ -1,0 +1,233 @@
+SOFTWARE DEVELOPMENT AND SERVICES AGREEMENT
+
+This Software Development and Services Agreement ("Agreement") is entered into as of January 15, 2025
+("Effective Date") by and between:
+
+AlphaTech Solutions Inc., a Delaware corporation with its principal place of business at
+1200 Innovation Drive, Suite 400, San Francisco, CA 94105 ("Client"),
+
+and
+
+DevCraft Labs LLC, a California limited liability company with its principal place of business at
+890 Startup Row, Floor 3, San Jose, CA 95113 ("Contractor").
+
+RECITALS
+
+WHEREAS, Client desires to engage Contractor to develop certain software and provide related services;
+WHEREAS, Contractor has the expertise and capacity to provide such services;
+
+NOW, THEREFORE, in consideration of the mutual covenants contained herein, the parties agree as follows:
+
+────────────────────────────────────────────────────────────────
+
+SECTION 1 — SCOPE OF SERVICES
+
+1.1 Services. Contractor shall design, develop, test, and deliver a cloud-based inventory management
+platform ("Software") in accordance with the specifications set forth in Exhibit A ("Specifications"),
+incorporated herein by reference.
+
+1.2 Change Orders. Any modification to the Specifications must be agreed in writing and may result in
+additional fees and timeline adjustments at Contractor's then-current rates.
+
+1.3 Subcontractors. Contractor may engage subcontractors without Client's prior written consent,
+provided Contractor remains fully liable for all subcontractor work product and conduct.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 2 — PAYMENT TERMS
+
+2.1 Fees. Client shall pay Contractor a fixed project fee of $480,000 USD, payable as follows:
+    (a) 30% ($144,000) upon execution of this Agreement;
+    (b) 30% ($144,000) upon delivery of Beta Version (estimated: June 1, 2025);
+    (c) 40% ($192,000) upon Final Delivery and Client acceptance.
+
+2.2 Expenses. Client shall reimburse reasonable, pre-approved out-of-pocket expenses within 30 days
+of receipt of itemized invoices.
+
+2.3 Late Payments. Invoices unpaid after 30 days shall accrue interest at 1.5% per month
+(18% per annum), compounded monthly.
+
+2.4 Taxes. Each party shall be responsible for its own taxes arising from this Agreement. Contractor
+shall provide a completed W-9 upon request.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 3 — INTELLECTUAL PROPERTY ASSIGNMENT
+
+3.1 Work for Hire. All deliverables created by Contractor under this Agreement ("Work Product"),
+including source code, documentation, designs, and data models, shall be considered "work made for hire"
+within the meaning of the U.S. Copyright Act. To the extent any Work Product does not qualify as
+work made for hire, Contractor hereby irrevocably assigns to Client all right, title, and interest,
+including all intellectual property rights, in and to such Work Product.
+
+3.2 Pre-Existing IP. Contractor retains ownership of any tools, libraries, frameworks, or methodologies
+created prior to or independently of this Agreement ("Background IP"). Contractor grants Client a
+non-exclusive, royalty-free, perpetual, worldwide license to use Background IP solely as integrated
+into the Work Product.
+
+3.3 Open Source. Contractor shall notify Client in writing before incorporating any open-source software
+subject to a copyleft or "viral" license (e.g., GPL, AGPL) into the Work Product. Client may reject
+such incorporation at its discretion.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 4 — CONFIDENTIALITY
+
+4.1 Definition. "Confidential Information" means any non-public information disclosed by one party
+("Disclosing Party") to the other ("Receiving Party") that is designated as confidential or that
+reasonably should be understood to be confidential given the nature of the information.
+
+4.2 Obligations. Receiving Party shall: (a) hold Confidential Information in strict confidence using
+at least the same degree of care it uses for its own confidential information (but no less than
+reasonable care); (b) not disclose Confidential Information to any third party without prior written
+consent; and (c) use Confidential Information solely for the purpose of performing obligations
+under this Agreement.
+
+4.3 Term. Confidentiality obligations shall survive for five (5) years after termination of this Agreement.
+
+4.4 Exceptions. Obligations do not apply to information that: (a) is or becomes publicly available
+without breach; (b) was already known to the Receiving Party; (c) is independently developed; or
+(d) is required to be disclosed by law or court order, provided prompt written notice is given.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 5 — WARRANTIES AND REPRESENTATIONS
+
+5.1 Contractor Warranties. Contractor warrants that: (a) it has full authority to enter into this
+Agreement; (b) the Work Product will conform to the Specifications for a period of ninety (90) days
+following Final Delivery ("Warranty Period"); (c) the Work Product will not knowingly infringe any
+third-party intellectual property rights; and (d) Contractor personnel assigned to this project
+hold qualifications reasonably necessary to perform the Services.
+
+5.2 Disclaimer. EXCEPT AS EXPRESSLY SET FORTH IN SECTION 5.1, CONTRACTOR MAKES NO OTHER WARRANTIES,
+EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, OR NON-INFRINGEMENT. CLIENT ACCEPTS THE SOFTWARE "AS IS" AFTER THE WARRANTY PERIOD.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 6 — INDEMNIFICATION
+
+6.1 By Contractor. Contractor shall defend, indemnify, and hold harmless Client and its officers,
+directors, employees, and agents from and against any claims, damages, losses, costs, and attorneys'
+fees arising out of or relating to: (a) Contractor's breach of this Agreement; (b) any claim that the
+Work Product infringes a third party's intellectual property rights; or (c) the gross negligence or
+willful misconduct of Contractor or its personnel.
+
+6.2 By Client. Client shall defend, indemnify, and hold harmless Contractor from and against any claims
+arising out of: (a) Client's breach of this Agreement; or (b) Client's use of the Work Product in a
+manner inconsistent with this Agreement or applicable law.
+
+6.3 Procedure. The indemnified party shall: (a) promptly notify the indemnifying party of any claim;
+(b) grant the indemnifying party sole control of defense and settlement; and (c) provide reasonable
+cooperation at indemnifying party's expense.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 7 — LIMITATION OF LIABILITY
+
+7.1 Exclusion of Consequential Damages. IN NO EVENT SHALL EITHER PARTY BE LIABLE FOR ANY INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES, INCLUDING LOSS OF PROFITS, REVENUE,
+DATA, OR BUSINESS OPPORTUNITIES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7.2 Cap on Liability. EACH PARTY'S TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THIS
+AGREEMENT SHALL NOT EXCEED THE TOTAL FEES PAID OR PAYABLE BY CLIENT IN THE TWELVE (12) MONTHS
+IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO LIABILITY.
+
+7.3 Essential Basis. THE PARTIES ACKNOWLEDGE THAT THE LIMITATIONS OF LIABILITY IN THIS SECTION
+REFLECT A REASONABLE ALLOCATION OF RISK AND ARE AN ESSENTIAL ELEMENT OF THE BASIS OF THE BARGAIN
+BETWEEN THE PARTIES.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 8 — TERM AND TERMINATION
+
+8.1 Term. This Agreement commences on the Effective Date and continues until Final Delivery and
+acceptance of the Software, unless earlier terminated.
+
+8.2 Termination for Convenience. Client may terminate this Agreement upon thirty (30) days' prior
+written notice to Contractor, provided Client pays Contractor for all work completed through the date
+of termination plus a termination fee equal to 15% of the remaining unpaid contract balance.
+
+8.3 Termination for Cause. Either party may terminate immediately upon written notice if the other
+party: (a) materially breaches this Agreement and fails to cure such breach within fifteen (15) days
+after written notice; or (b) becomes insolvent, makes an assignment for the benefit of creditors,
+or has a receiver appointed.
+
+8.4 Effect of Termination. Upon termination, Contractor shall promptly deliver all completed work
+product and works-in-progress to Client. Client shall pay for all services rendered through the
+termination date. Sections 3, 4, 5.2, 6, 7, and 9 shall survive termination.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 9 — DISPUTE RESOLUTION
+
+9.1 Informal Resolution. Prior to initiating formal proceedings, the parties shall attempt to resolve
+any dispute through good-faith negotiation for thirty (30) days following written notice of the dispute.
+
+9.2 Binding Arbitration. Any dispute not resolved informally shall be submitted to binding arbitration
+administered by JAMS pursuant to its Comprehensive Arbitration Rules. The arbitration shall be
+conducted in San Francisco, California. The arbitrator's award shall be final and binding and may be
+entered in any court of competent jurisdiction.
+
+9.3 Class Action Waiver. EACH PARTY WAIVES ANY RIGHT TO PARTICIPATE IN CLASS OR REPRESENTATIVE
+PROCEEDINGS. Arbitration shall be conducted on an individual basis only.
+
+9.4 Injunctive Relief. Notwithstanding Section 9.2, either party may seek emergency injunctive relief
+in any court of competent jurisdiction to prevent irreparable harm pending arbitration.
+
+────────────────────────────────────────────────────────────────
+
+SECTION 10 — GENERAL PROVISIONS
+
+10.1 Governing Law. This Agreement shall be governed by the laws of the State of California, without
+regard to its conflict-of-laws principles.
+
+10.2 Entire Agreement. This Agreement, together with all Exhibits, constitutes the entire agreement
+between the parties and supersedes all prior agreements, representations, and understandings.
+
+10.3 Amendment. No amendment shall be effective unless made in writing and signed by authorized
+representatives of both parties.
+
+10.4 Waiver. Failure to enforce any provision shall not constitute a waiver of future enforcement rights.
+
+10.5 Severability. If any provision is held invalid or unenforceable, the remaining provisions
+shall continue in full force.
+
+10.6 Force Majeure. Neither party shall be liable for delays or failures in performance caused by
+circumstances beyond its reasonable control, including natural disasters, government actions,
+epidemics, or infrastructure failures, provided that the affected party gives prompt written notice
+and uses commercially reasonable efforts to resume performance.
+
+10.7 Assignment. Neither party may assign this Agreement without the other's prior written consent,
+except that either party may assign to a successor in connection with a merger, acquisition, or
+sale of substantially all assets, provided the assignee assumes all obligations hereunder.
+
+10.8 Notices. All notices shall be in writing and delivered by email with confirmation of receipt,
+overnight courier, or certified mail to the addresses set forth above.
+
+────────────────────────────────────────────────────────────────
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the Effective Date.
+
+ALPHATECH SOLUTIONS INC.                    DEVCRAFT LABS LLC
+
+By: ___________________________             By: ___________________________
+Name: Sarah Chen                            Name: Marcus Okafor
+Title: Chief Technology Officer             Title: Managing Member
+Date: January 15, 2025                      Date: January 15, 2025
+
+────────────────────────────────────────────────────────────────
+
+EXHIBIT A — SOFTWARE SPECIFICATIONS (Summary)
+
+Platform: Cloud-based SaaS inventory management system
+Architecture: Microservices, deployed on AWS
+Key Features: Real-time inventory tracking, automated reorder alerts, multi-warehouse support,
+              ERP integration (SAP, Oracle), mobile app (iOS/Android), analytics dashboard
+Tech Stack: Java 21 backend, React 18 frontend, PostgreSQL, Redis, Kafka
+Delivery Milestones:
+  - Alpha (internal): March 15, 2025
+  - Beta (Client review): June 1, 2025
+  - Final Delivery: September 30, 2025
+Performance SLA: 99.5% uptime post-launch; API response < 200ms (p95)
+Security: SOC 2 Type II compliance, AES-256 encryption at rest and in transit
